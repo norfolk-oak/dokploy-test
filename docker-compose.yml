@@ -8,8 +8,8 @@ services:
       - PGID=1000
     volumes:
       - librespeed_config:/config
-      - ./branding/naked.css:/config/www/naked.css
-
+      # IMPORTANT: no :ro
+      - ./branding:/config/www
     expose:
       - "80"
 
