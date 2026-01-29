@@ -2,7 +2,21 @@ version: "3.9"
 
 services:
   librespeed:
-    build: .
+    image: lscr.io/linuxserver/librespeed:latest
     restart: unless-stopped
+    environment:
+      - TZ=Europe/London
+      - PUID=1000
+      - PGID=1000
+      # Optional: protect results/stats page
+      - PASSWORD=Raynham!21
+    volumes:
+      - librespeed_config:/config
+      # Override the UI (keep backend from the container)
+      - ./branding/index.html:/config/www/index.html:ro
+      - ./branding/style.css:/config/www/style.css:ro
     expose:
       - "80"
+
+volumes:
+  librespeed_config:
