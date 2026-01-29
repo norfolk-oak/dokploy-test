@@ -1,8 +1,8 @@
 FROM lscr.io/linuxserver/librespeed:latest
 
-# Put our branding files into the image
-COPY branding/ /opt/branding/
+# Put our css into the image
+COPY style.css /opt/naked-style.css
 
-# Add an init script that copies branding into /config/www on container start
+# Run on container start (linuxserver convention)
 COPY rootfs/ /
-RUN chmod +x /custom-cont-init.d/10-branding.sh
+RUN chmod +x /custom-cont-init.d/10-style.sh
