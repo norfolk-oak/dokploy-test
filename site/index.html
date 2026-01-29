@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>NAKED Manufacturing — Speed Test</title>
+
+  <!-- LibreSpeed scripts -->
+  <script src="speedtest.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div class="brand">
+        <div class="name">NAKED Manufacturing</div>
+        <h1 class="title">Network Speed Test</h1>
+        <small>Run a quick download/upload test to this environment.</small>
+      </div>
+      <div class="pill" id="statusPill">Idle</div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="kpi">
+          <div class="label">Ping</div>
+          <div class="value"><span id="ping">—</span> <small>ms</small></div>
+        </div>
+        <div class="kpi">
+          <div class="label">Jitter</div>
+          <div class="value"><span id="jitter">—</span> <small>ms</small></div>
+        </div>
+        <div class="kpi">
+          <div class="label">Download</div>
+          <div class="value"><span id="dl">—</span> <small>Mbps</small></div>
+        </div>
+        <div class="kpi">
+          <div class="label">Upload</div>
+          <div class="value"><span id="ul">—</span> <small>Mbps</small></div>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="primary" id="startBtn">Start Test</button>
+        <button id="stopBtn" disabled>Stop</button>
+        <small id="note" style="align-self:center">Best results: use wired connection.</small>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Minimal wiring to LibreSpeed
+  const statusPill = document.getElementById("statusPill");
+  const pingEl = document.getElementById("ping");
+  const jitterEl = document.getElementById("jitter");
+  const dlEl = document.getElementById("dl");
+  const ulEl = document.getElementById("ul");
+  const startBtn = document.getElementById("startBtn");
+  const stopBtn = document.getElementById("stopBtn");
+
+  let s = null;
+
+  function setStatus(t){ statusPill.textContent = t; }
+
+  function fmt(n){
+    if (n === "" || n === null || n === undefined) return "—";
+    const x = Number(n);
+    if (!isFinite(x)) return "—";
+    return x.toFixed(2);
+  }
+
+  function uiUpdate(data){
+    // data is a string from LibreSpeed status; we parse with getters
+    pingEl.textContent = fmt(s.getPing());
+    jitterEl.textContent = fmt(s.getJitter());
+    dlEl.textContent = fmt(s.getDlSpeed());
+    ulEl.textContent = fmt(s.getUlSpeed());
+  }
+
+  startBtn.onclick = () => {
+    if (s) return;
+    s = new Speedtest();
+
+    // Optional tuning (safe defaults)
+    // s.setParameter("time_dl","10");
+    // s.setParameter("time_ul","10");
+
+    s.onupdate = (data) => {
+      setStatus("Running");
+      uiUpdate(data);
+    };
+    s.onend = (aborted) => {
+      setStatus(aborted ? "Stopped" : "Done");
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      s = null;
+    };
+
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    setStatus("Starting…");
+    s.start();
+  };
+
+  stopBtn.onclick = () => {
+    if (!s) return;
+    s.abort();
+  };
+
+  setStatus("Idle");
+</script>
+</body>
+</html>
