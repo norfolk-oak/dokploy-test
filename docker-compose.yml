@@ -1,6 +1,6 @@
 services:
   librespeed:
-    image: lscr.io/linuxserver/librespeed:latest
+    build: .
     restart: unless-stopped
     environment:
       - TZ=Europe/London
@@ -8,8 +8,6 @@ services:
       - PGID=1000
     volumes:
       - librespeed_config:/config
-      # IMPORTANT: no :ro
-      - ./branding:/config/www
     expose:
       - "80"
 
