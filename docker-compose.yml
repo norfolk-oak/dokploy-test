@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   librespeed:
     image: lscr.io/linuxserver/librespeed:latest
@@ -8,14 +6,10 @@ services:
       - TZ=Europe/London
       - PUID=1000
       - PGID=1000
-      # Optional: protect results/stats page
-      - PASSWORD=nfJ8bd820lnf
     volumes:
       - librespeed_config:/config
-      # Override the UI (keep backend from the container)
+      # IMPORTANT: no :ro
       - ./branding:/config/www
-      #- ./branding/index.html:/config/www/index.html:ro
-      #- ./branding/style.css:/config/www/style.css:ro
     expose:
       - "80"
 
