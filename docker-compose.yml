@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  naked-speedtest:
+  librespeed:
     build: .
     restart: unless-stopped
     expose:
