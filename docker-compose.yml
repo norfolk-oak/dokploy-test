@@ -9,7 +9,7 @@ services:
       - PUID=1000
       - PGID=1000
       # Optional: protect results/stats page
-      - PASSWORD=Raynham!21
+      - PASSWORD=nfJ8bd820lnf
     volumes:
       - librespeed_config:/config
       # Override the UI (keep backend from the container)
