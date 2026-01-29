@@ -13,6 +13,7 @@ services:
     volumes:
       - librespeed_config:/config
       # Override the UI (keep backend from the container)
+      - ./branding:/config/www:ro
       #- ./branding/index.html:/config/www/index.html:ro
       #- ./branding/style.css:/config/www/style.css:ro
     expose:
